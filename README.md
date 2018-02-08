@@ -15,7 +15,7 @@ Andrioid phone
 
 git clone https://github.com/DWShuo/wardrobeOS.git
 
-### coding style 
+### Coding Style 
 We are using Google java style guide, the following is a condensed version of Google's style guide. [More Info](https://google.github.io/styleguide/javaguide.html)
 * Variable declarations  
   * Class names are written in UpperCamelCase. 
