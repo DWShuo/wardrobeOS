@@ -26,6 +26,6 @@ Example
 * [Maven](https://maven.apache.org/) - Dependency Management
 
 ## Contributing
-David Wang
-Meghnath Shankar
-Enoch
+David Wang  
+Meghnath Shankar  
+Enoch Huang  
