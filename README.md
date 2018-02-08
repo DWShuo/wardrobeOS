@@ -27,4 +27,5 @@ Example
 
 ## Contributing
 David Wang
-
+Meghnath Shankar
+Enoch
