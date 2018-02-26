@@ -16,6 +16,8 @@ public class basic_activity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setTitle("Add Clothing Item");
+
         configurebackbutton();
 
     }
