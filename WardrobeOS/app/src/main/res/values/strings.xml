@@ -31,4 +31,8 @@
     <string name="colortype10">Black</string>
     <string name="colortype11">White</string>
     <string name="colortype">Color</string>
+
+    <string name="feedbackbody">Add addittional descriptors for the item (ex. stripes, graphic design, cotton, etc.)</string>
+
+    <string name="submitbutton">Submit</string>
 </resources>

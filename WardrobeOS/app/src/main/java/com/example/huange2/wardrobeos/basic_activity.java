@@ -12,7 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 public class basic_activity extends AppCompatActivity {
 
@@ -51,6 +53,24 @@ public class basic_activity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    //submit a manually inputted item
+    public void submititem(View button) {
+        // Do click handling here
+        final EditText nameField = (EditText) findViewById(R.id.EditTextName);
+        String name = nameField.getText().toString();
+        final EditText brandField = (EditText) findViewById(R.id.EditBrandName);
+        String brand = brandField.getText().toString();
+        final EditText descriptionsField = (EditText) findViewById(R.id.EditTextFeedbackBody);
+        String description = descriptionsField.getText().toString();
+
+        final Spinner colorSpinner = (Spinner) findViewById(R.id.SpinnerColorType);
+        String color = colorSpinner.getSelectedItem().toString();
+        final Spinner typeSpinner = (Spinner) findViewById(R.id.SpinnerFeedbackType);
+        String type = typeSpinner.getSelectedItem().toString();
+        finish();
+
     }
 
     @Override

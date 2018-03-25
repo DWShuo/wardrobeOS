@@ -55,7 +55,7 @@
         android:textSize="10pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.108"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.092"></TextView>
@@ -71,9 +71,10 @@
         android:hint="Item Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.188"></EditText>
+        app:layout_constraintVertical_bias="0.154"></EditText>
 
     <EditText
         android:id="@+id/EditBrandName"
@@ -89,7 +90,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.279"></EditText>
+        app:layout_constraintVertical_bias="0.245"></EditText>
 
     <TextView
         android:id="@+id/TextViewColor"
@@ -103,10 +104,10 @@
         android:textSize="8pt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.025"
+        app:layout_constraintHorizontal_bias="0.024"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.358"></TextView>
+        app:layout_constraintVertical_bias="0.323"></TextView>
 
     <Spinner
         android:id="@+id/SpinnerColorType"
@@ -123,7 +124,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.406"></Spinner>
+        app:layout_constraintVertical_bias="0.37"></Spinner>
 
     <TextView
         android:id="@+id/TextViewType"
@@ -140,7 +141,7 @@
         app:layout_constraintHorizontal_bias="0.024"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.452"></TextView>
+        app:layout_constraintVertical_bias="0.416"></TextView>
 
     <Spinner
         android:id="@+id/SpinnerFeedbackType"
@@ -157,7 +158,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/appBarLayout"
-        app:layout_constraintVertical_bias="0.499"></Spinner>
+        app:layout_constraintVertical_bias="0.462"></Spinner>
 
     <Button
         android:id="@+id/buttonLoadPicture"
@@ -175,7 +176,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.57"></Button>
+        app:layout_constraintVertical_bias="0.711"></Button>
 
     <ImageView
         android:id="@+id/imgView"
@@ -191,7 +192,39 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.239"></ImageView>
+        app:layout_constraintVertical_bias="0.526"></ImageView>
+
+    <EditText
+        android:id="@+id/EditTextFeedbackBody"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/feedbackbody"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.58"></EditText>
+
+    <Button
+        android:id="@+id/ButtonSendFeedback"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:onClick="submititem"
+        android:text="@string/submitbutton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"></Button>
 
 
 
