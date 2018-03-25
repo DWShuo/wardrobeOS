@@ -4,4 +4,31 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_basic_activity">basic_activity</string>
+
+    <!--Strings for clothing types-->
+    <string name="feedbacktype1">Coat/Jacket</string>
+    <string name="feedbacktype2">Hoodie/Sweater</string>
+    <string name="feedbacktype3">Sweatshirt/Longsleeve</string>
+    <string name="feedbacktype4">T-shirt</string>
+    <string name="feedbacktype5">Pants</string>
+    <string name="feedbacktype6">Undergarment</string>
+    <string name="feedbacktype7">Dress</string>
+    <string name="feedbacktype8">Skirt</string>
+    <string name="feedbacktype9">Suit</string>
+    <string name="feedbacktype10">Shoes</string>
+    <string name="feedbacktype11">Accessories</string>
+    <string name="feedbacktype">Item Type</string>
+
+    <string name="colortype1">Red</string>
+    <string name="colortype2">Orange</string>
+    <string name="colortype3">Yellow</string>
+    <string name="colortype4">Green</string>
+    <string name="colortype5">Blue</string>
+    <string name="colortype6">Purple</string>
+    <string name="colortype7">Pink</string>
+    <string name="colortype8">Brown</string>
+    <string name="colortype9">Gray</string>
+    <string name="colortype10">Black</string>
+    <string name="colortype11">White</string>
+    <string name="colortype">Color</string>
 </resources>
