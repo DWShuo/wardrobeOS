@@ -1,38 +1,78 @@
 <resources>
-    <string name="app_name">WardrobeOS</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_activity_basic_activity">basic_activity</string>
-
-    <!--Strings for clothing types-->
-    <string name="feedbacktype1">Coat/Jacket</string>
-    <string name="feedbacktype2">Hoodie/Sweater</string>
-    <string name="feedbacktype3">Sweatshirt/Longsleeve</string>
-    <string name="feedbacktype4">T-shirt</string>
-    <string name="feedbacktype5">Pants</string>
-    <string name="feedbacktype6">Undergarment</string>
-    <string name="feedbacktype7">Dress</string>
-    <string name="feedbacktype8">Skirt</string>
-    <string name="feedbacktype9">Suit</string>
-    <string name="feedbacktype10">Shoes</string>
-    <string name="feedbacktype11">Accessories</string>
-    <string name="feedbacktype">Item Type</string>
-
-    <string name="colortype1">Red</string>
-    <string name="colortype2">Orange</string>
-    <string name="colortype3">Yellow</string>
-    <string name="colortype4">Green</string>
-    <string name="colortype5">Blue</string>
-    <string name="colortype6">Purple</string>
-    <string name="colortype7">Pink</string>
-    <string name="colortype8">Brown</string>
-    <string name="colortype9">Gray</string>
-    <string name="colortype10">Black</string>
-    <string name="colortype11">White</string>
-    <string name="colortype">Color</string>
-
-    <string name="feedbackbody">Add addittional descriptors for the item (ex. stripes, graphic design, cotton, etc.)</string>
-
-    <string name="submitbutton">Submit</string>
+    <string name="app_name">wardrobeOS</string>
+    <string name="brand">Brand</string>
+    <string name="type">Type</string>
+    <string name="color">Color</string>
+    <string name="info_about_clothes">Info about clothes</string>
+    <string name="photo">Photo</string>
+    <string name="add_new_item">Add new item</string>
+    <string name="save">Save</string>
+    <string name="about_info">About Info</string>
+    <string name="weather_sunny">&#xf00d;</string>
+    <string name="weather_clear_night">&#xf02e;</string>
+    <string name="weather_foggy">&#xf014;</string>
+    <string name="weather_cloudy">&#xf013;</string>
+    <string name="weather_rainy">&#xf019;</string>
+    <string name="weather_snowy">&#xf01b;</string>
+    <string name="weather_thunder">&#xf01e;</string>
+    <string name="weather_drizzle">&#xf01c;</string>
+    <string name="place_not_found">Sorry, no weather data found.</string>
+    <string-array name="type_array">
+        <item>Armwear</item>
+        <item>Belts</item>
+        <item>Coats</item>
+        <item>Dresses</item>
+        <item>Footwear</item>
+        <item>Gowns</item>
+        <item>Headgear</item>
+        <item>Hosiery</item>
+        <item>Jackets</item>
+        <item>Jeans</item>
+        <item>Knee clothing</item>
+        <item>Masks</item>
+        <item>Neckwear</item>
+        <item>One-piece suits</item>
+        <item>Outerwear</item>
+        <item>Ponchos</item>
+        <item>Robes and cloaks</item>
+        <item>Royal attire</item>
+        <item>Saris</item>
+        <item>Shawls and wraps</item>
+        <item>Skirts</item>
+        <item>Sports clothing</item>
+        <item>Suits</item>
+        <item>Tops</item>
+        <item>Trousers and shorts</item>
+        <item>Undergarments</item>
+        <item>Wedding cloths</item>
+    </string-array>
+    <string-array name="brand_array">
+        <item>AMERICAN GIANT</item>
+        <item>BALDWIN</item>
+        <item>BEYOND</item>
+        <item>BILL\'S KHAKIS</item>
+        <item>BIRDWELL BEACH BRITCHES</item>
+        <item>BROOKS BROTHERS</item>
+        <item>BUCK MASON</item>
+        <item>EBBETS FIELD FLANNELS</item>
+        <item>FREEMANS SPORTING CLUB</item>
+        <item>FREENOTE CLOTH</item>
+        <item>FILSON</item>
+        <item>GROWN AND SEWN</item>
+        <item>IMOGENE AND WILLIE</item>
+        <item>IRON AND RESIN</item>
+        <item>JEAN SHOP</item>
+        <item>MOLLUSK SURF</item>
+        <item>RISING SUN</item>
+        <item>TAYLOR STITCH</item>
+        <item>TOPO DESIGNS</item>
+        <item>WOOLRICH</item>
+    </string-array>
+    <string name="hint_image_preview_click">Click on a item to preview them.</string>
+    <string name="album_title_permission_failed">Access to failure</string>
+    <string name="album_permission_storage_failed_hint">Failed to get Storage permission, please authorize in the Settings before use.</string>
+    <string name="album_permission_camera_image_failed_hint">Failed to get Camera/Storage permissions, please authorize in the Settings before use.</string>
+    <string name="album_permission_camera_video_failed_hint">Failed to get Camera/Storage/Microphone permissions, please authorize in the Settings before use.</string>
+    <string name="album_dialog_sure">OK</string>
+    <string name="menu_camera_image">Image</string>
 </resources>

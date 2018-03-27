@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/MatchParent">
+
+    <include layout="@layout/toolbar"/>
+
+    <LinearLayout
+        style="@style/MatchParent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/tv_message"
+            style="@style/WrapContent.WidthMatchParent"
+            android:layout_margin="10dp"/>
+
+        <ImageView
+            android:id="@+id/image_view"
+            style="@style/MatchParent"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"/>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

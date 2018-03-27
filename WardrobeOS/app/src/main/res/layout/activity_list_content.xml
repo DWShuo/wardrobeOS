@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/MatchParent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <TextView
+        android:id="@+id/tv_message"
+        style="@style/WrapContent"
+        android:layout_margin="10dp"
+        android:text="@string/hint_image_preview_click"
+        android:textSize="18sp"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/image_view"
+        style="@style/album_WrapContent"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        style="@style/WrapContent.WidthMatchParent"
+        android:layout_marginTop="10dp"/>
+</LinearLayout>

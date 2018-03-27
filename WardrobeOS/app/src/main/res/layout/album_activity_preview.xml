@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/album_MatchParent"
+    android:background="@color/album_ColorPrimaryBlack">
+
+    <com.yanzhenjie.album.widget.photoview.FixViewPager
+        android:id="@+id/view_pager"
+        style="@style/album_MatchParent"/>
+
+    <LinearLayout
+        style="@style/album_WrapContent.WidthMatchParent"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <com.yanzhenjie.statusview.StatusView
+            style="@style/album_WrapContent.WidthMatchParent"
+            android:background="@android:color/transparent"/>
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/album_Toolbar"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/album_WrapContent.WidthMatchParent"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/bottom_root"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize">
+
+            <TextView
+                android:id="@+id/tv_duration"
+                style="@style/album_WrapContent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
+                android:layout_marginStart="6dp"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:textColor="@color/album_FontLight"
+                android:visibility="gone"/>
+
+
+        </RelativeLayout>
+
+        <com.yanzhenjie.statusview.NavigationView
+            android:id="@+id/navigation_view"
+            style="@style/album_WrapContent.WidthMatchParent"/>
+    </LinearLayout>
+
+</RelativeLayout>
