@@ -99,6 +99,7 @@ public class SuggestionFragment extends Fragment {
         if (((MainActivity)getActivity()) != null) {
             mLocation = ((MainActivity)getActivity()).getCurrentLocation();
             getWeatherAndSuggestion(mLocation);
+            getSuggestion();
         }
         getSuggestion();
     }
