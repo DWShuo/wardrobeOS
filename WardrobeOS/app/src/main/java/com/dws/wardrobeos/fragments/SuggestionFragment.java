@@ -64,6 +64,9 @@ public class SuggestionFragment extends Fragment {
     @BindView(R.id.view_clothes) RecyclerView recyclerView;
     SuggestAdapter mAdapter;
 
+    private int humidity;
+    private double temperature;
+
     private List<ClothItem> mClothes;
 
     public SuggestionFragment() {
@@ -101,7 +104,7 @@ public class SuggestionFragment extends Fragment {
             getWeatherAndSuggestion(mLocation);
             getSuggestion();
         }
-        getSuggestion();
+
     }
 
     private void getSuggestion() {
@@ -110,18 +113,31 @@ public class SuggestionFragment extends Fragment {
         RealmResults<ClothItem> results = realm.where(ClothItem.class).findAll();
         if (results.size() > 0) {
 
-            notFound.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-            mClothes.addAll(results);
+            for (int k=0;k<results.size();k++) {
+                ClothItem item = results.get(k);
 
-            mAdapter = new SuggestAdapter(getActivity(), mClothes);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(mAdapter);
+                if (getSuggestedClothes(item, temperature, humidity)) {
+                    mClothes.add(item);
+                }
+            }
+
+            if (mClothes.size() > 0) {
+
+                showClothes(true);
+
+                mAdapter = new SuggestAdapter(getActivity(), mClothes);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setAdapter(mAdapter);
+            } else {
+                showClothes(false);
+            }
+
+
         } else {
-            notFound.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
+
+            showClothes(false);
         }
     }
 
@@ -160,6 +176,8 @@ public class SuggestionFragment extends Fragment {
                                     weatherHumidity.setText(String.format("Humidity: %s%%", String.valueOf(mainObj.getInt("humidity"))));
                                     weatherPressure.setText(String.format("Pressure: %shPa", String.valueOf(mainObj.getDouble("pressure"))));
                                     weatherTemp.setText(String.format("%s`C", String.format("%.2f", mainObj.getDouble("temp")/100)));
+                                    temperature = mainObj.getDouble("temp");
+                                    humidity = mainObj.getInt("humidity");
                                 }
                             }
                         } catch (JSONException e) {
@@ -199,6 +217,26 @@ public class SuggestionFragment extends Fragment {
                 case 5: weatherIcon.setImageResource(R.drawable.weather_rainy);
                 break;
             }
+        }
+    }
+
+    private boolean getSuggestedClothes(ClothItem item, double temp, float humidity) {
+        if (temp > 20.0 && humidity < 100) {
+            return true;
+        } else if (temp > 30.0 && item.getColor() > 4294101) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void showClothes(boolean result) {
+        if (result) {
+            notFound.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            notFound.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
         }
     }
 }

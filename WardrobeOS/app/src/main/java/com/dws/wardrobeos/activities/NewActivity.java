@@ -1,15 +1,5 @@
 package com.dws.wardrobeos.activities;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-import android.app.Activity;
-import android.content.Intent;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-
-
-import com.dws.wardrobeos.R;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -72,11 +62,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
-public class NewActivity extends AppCompatActivity implements ColorPickerDialogFragment.ColorDialogResultListener, ActionSheet.ActionSheetListener, OnClickListener {
+public class NewActivity extends AppCompatActivity implements ColorPickerDialogFragment.ColorDialogResultListener, ActionSheet.ActionSheetListener {
 
     private static String TAG = "NewActivity";
-    private Button scanBtn;
-    private TextView formatTxt, contentTxt;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.photo) AppCompatImageView photoView;
@@ -129,21 +117,6 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
             ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_PERMISSION);
         } else {
             permissionResult = true;
-        }
-
-        scanBtn = (Button)findViewById(R.id.scan_button);
-        formatTxt = (TextView)findViewById(R.id.scan_format);
-        contentTxt = (TextView)findViewById(R.id.scan_content);
-        scanBtn.setOnClickListener(this);
-    }
-
-    public void onClick(View v){
-        //respond to clicks
-        if(v.getId()==R.id.scan_button){
-            //scan
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            scanIntegrator.initiateScan();
-
         }
     }
 
@@ -356,7 +329,6 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             Drawable icon = null;
             InputStream is;
@@ -371,19 +343,6 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
             }
 
             photoView.setImageDrawable(icon);
-        }
-
-        if (scanningResult != null) {
-            //we have a result
-            String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
-            formatTxt.setText("FORMAT: " + scanFormat);
-            contentTxt.setText("CONTENT: " + scanContent);
-        }
-        else{
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
         }
     }
 
