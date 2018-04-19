@@ -45,6 +45,14 @@
                     android:layout_centerHorizontal="true"
                     android:layout_below="@id/scan_format" />
 
+                <TextView
+                    android:id="@+id/code_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/scan_format" />
+
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/photo"
                     android:layout_width="160dp"

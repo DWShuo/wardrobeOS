@@ -58,6 +58,7 @@ import org.dmfs.android.colorpicker.palettes.FactoryPalette;
 import org.dmfs.android.colorpicker.palettes.Palette;
 import org.dmfs.android.colorpicker.palettes.RainbowColorFactory;
 import org.dmfs.android.colorpicker.palettes.RandomPalette;
+import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -72,11 +73,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 public class NewActivity extends AppCompatActivity implements ColorPickerDialogFragment.ColorDialogResultListener, ActionSheet.ActionSheetListener, OnClickListener {
 
     private static String TAG = "NewActivity";
     private Button scanBtn;
-    private TextView formatTxt, contentTxt;
+    private TextView formatTxt, contentTxt, resultTxt;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.photo) AppCompatImageView photoView;
@@ -134,6 +138,7 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
         scanBtn = (Button)findViewById(R.id.scan_button);
         formatTxt = (TextView)findViewById(R.id.scan_format);
         contentTxt = (TextView)findViewById(R.id.scan_content);
+        resultTxt = (TextView)findViewById(R.id.code_result);
         scanBtn.setOnClickListener(this);
     }
 
@@ -377,8 +382,10 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
             //we have a result
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
+            String itemlink = "https://www.barcodelookup.com/"+scanContent;
             formatTxt.setText("FORMAT: " + scanFormat);
             contentTxt.setText("CONTENT: " + scanContent);
+
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),
