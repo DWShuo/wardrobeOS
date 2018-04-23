@@ -41,19 +41,24 @@ public class SuggestAdapter extends RecyclerView.Adapter<SuggestAdapter.SuggestV
         ClothItem cloth = mClothes.get(position);
 
         if (cloth.getPhoto() != null) {
-            Log.d("Test", cloth.getPhoto());
-            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "CameraDemo");
-            final File file = new File(mediaStorageDir, cloth.getPhoto());
-            if (file.exists()) {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-                bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
-                holder.imgView.setImageBitmap(bitmap);
+            if (cloth.getSource()) {
+                File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "CameraDemo");
+                final File file = new File(mediaStorageDir, cloth.getPhoto());
+                if (file.exists()) {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 100, 100, true);
+                    holder.imgView.setImageBitmap(bitmap);
 
-                Glide.with(context)
-                        .load(bitmap)
-                        .into(holder.imgView);
+                    Glide.with(context)
+                            .load(bitmap)
+                            .into(holder.imgView);
 
+                }
+            } else {
+                if (!cloth.getPhoto().isEmpty()) {
+                    Glide.with(context).load(cloth.getPhoto()).into(holder.imgView);
+                }
             }
         }
     }

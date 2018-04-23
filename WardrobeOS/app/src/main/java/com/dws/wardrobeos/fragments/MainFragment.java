@@ -87,9 +87,7 @@ public class MainFragment extends Fragment implements ActionSheet.ActionSheetLis
             notFound.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             mClothes = new ArrayList<>();
-            for (int i=0;i<results.size();i++) {
-                mClothes.add(results.get(i));
-            }
+            mClothes.addAll(results);
             ClothesAdapter adapter = new ClothesAdapter(getActivity(), mClothes, new ClothesAdapter.ClickListener() {
                 @Override
                 public void longPressed(int position) {

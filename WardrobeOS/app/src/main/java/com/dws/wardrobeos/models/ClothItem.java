@@ -9,6 +9,7 @@ public class ClothItem extends RealmObject {
     private int color;
     private String photo;
     private String info;
+    private boolean source;
 
     public void setInfo(String info) {
         this.info = info;
@@ -43,5 +44,9 @@ public class ClothItem extends RealmObject {
 
     public String getPhoto() {return this.photo;}
 
+    public void setSource(boolean source) {
+        this.source = source;
+    }
 
+    public boolean getSource() {return this.source;}
 }

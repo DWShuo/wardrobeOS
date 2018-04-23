@@ -50,6 +50,8 @@
             android:theme="@style/album_TransparentActivity"
             android:windowSoftInputMode="stateAlwaysHidden|stateHidden"/>
 
+        <activity android:name=".activities.ScannerActivity"/>
+
         <provider
             android:name=".provider.CameraFileProvider"
             android:authorities="${applicationId}.com.dws.wardrobeos.provider"

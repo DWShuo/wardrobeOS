@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <FrameLayout
         android:layout_width="match_parent"
@@ -91,18 +92,39 @@
                         android:textColor="@android:color/black"/>
                 </RelativeLayout>
             </LinearLayout>
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/btn_add"
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/floating_action_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="25dp"
-                android:elevation="4dp"
-                android:src="@drawable/ic_add_white"
-                app:backgroundTint="@color/colorPrimary" />
+                fab:menu_shadowXOffset="1dp"
+                fab:menu_shadowYOffset="1dp"
+                fab:menu_animationDelayPerItem="50"
+                fab:menu_labels_textColor="#FFFFFF"
+                fab:menu_labels_textSize="14sp"
+                fab:menu_colorNormal="#689F38"
+                fab:menu_colorPressed="#689F38"
+                fab:menu_colorRipple="#689F38">
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/phone_action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="#689F38"
+                    fab:fab_size="mini"
+                    fab:fab_colorPressed="#689F38"
+                    fab:fab_colorRipple="#689F38"
+                    fab:fab_label="From Phone"/>
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/barcode_action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="#689F38"
+                    fab:fab_size="mini"
+                    fab:fab_label="Barcode"/>
+            </com.github.clans.fab.FloatingActionMenu>
         </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"

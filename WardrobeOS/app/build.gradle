@@ -38,4 +38,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+    implementation 'com.github.clans:fab:1.6.4'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.8'
+    implementation 'com.bigkoo:svprogresshud:1.0.6'
 }
