@@ -5,9 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <uses-feature
         android:name="android.hardware.location"
@@ -36,17 +36,21 @@
             android:name=".activities.GalleryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/album_ChoiceActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden"/>
+
         <activity
             android:name=".activities.GalleryAlbumActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/album_ChoiceActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden"/>
+
         <activity
             android:name=".activities.CameraActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/album_TransparentActivity"
-            android:windowSoftInputMode="stateAlwaysHidden|stateHidden" />
+            android:windowSoftInputMode="stateAlwaysHidden|stateHidden"/>
+
+        <activity android:name=".activities.ScannerActivity"/>
 
         <provider
             android:name=".provider.CameraFileProvider"
@@ -56,11 +60,8 @@
             android:multiprocess="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/album_camera_provider" />
+                android:resource="@xml/album_camera_provider"/>
         </provider>
-
-        <activity android:name=".activities.ScannerActivity"
-            android:exported="true"></activity>
     </application>
 
 </manifest>

@@ -33,8 +33,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    /*Main activity of the app. Setup main page, structure, layout, etc. */
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tabs)

@@ -19,6 +19,7 @@ public class MyApp extends Application {
         mGPSTracker = new GPSTracker(getApplicationContext());
         if (mGPSTracker.canGetLocation()) {
             Location location = mGPSTracker.getLocation();
+
         }
     }
 }

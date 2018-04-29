@@ -1,12 +1,17 @@
 package com.dws.wardrobeos.fragments;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -27,6 +32,7 @@ import com.dws.wardrobeos.Constants;
 import com.dws.wardrobeos.R;
 import com.dws.wardrobeos.activities.MainActivity;
 import com.dws.wardrobeos.activities.NewActivity;
+import com.dws.wardrobeos.activities.ScannerActivity;
 import com.dws.wardrobeos.adapters.SuggestAdapter;
 import com.dws.wardrobeos.models.ClothItem;
 
@@ -37,12 +43,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class SuggestionFragment extends Fragment {
 
@@ -52,8 +60,9 @@ public class SuggestionFragment extends Fragment {
     private int position;
     private Location mLocation;
 
+    private static final int PERMISSION_REQUESTED = 1992;
+
     @BindView(R.id.progress_bar) ProgressBar mProgressBar;
-    @BindView(R.id.btn_add) FloatingActionButton addBtn;
     @BindView(R.id.icon_weather) AppCompatImageView weatherIcon;
     @BindView(R.id.weather_description) AppCompatTextView weatherDesc;
     @BindView(R.id.weather_humidity) AppCompatTextView weatherHumidity;
@@ -63,6 +72,9 @@ public class SuggestionFragment extends Fragment {
 
     @BindView(R.id.view_clothes) RecyclerView recyclerView;
     SuggestAdapter mAdapter;
+
+    private int humidity;
+    private double temperature;
 
     private List<ClothItem> mClothes;
 
@@ -101,7 +113,7 @@ public class SuggestionFragment extends Fragment {
             getWeatherAndSuggestion(mLocation);
             getSuggestion();
         }
-        getSuggestion();
+
     }
 
     private void getSuggestion() {
@@ -110,29 +122,58 @@ public class SuggestionFragment extends Fragment {
         RealmResults<ClothItem> results = realm.where(ClothItem.class).findAll();
         if (results.size() > 0) {
 
-            notFound.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-            mClothes.addAll(results);
+            for (int k=0;k<results.size();k++) {
+                ClothItem item = results.get(k);
 
-            mAdapter = new SuggestAdapter(getActivity(), mClothes);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(mAdapter);
+                if (getSuggestedClothes(item, temperature, humidity)) {
+                    mClothes.add(item);
+                }
+            }
+
+            if (mClothes.size() > 0) {
+
+                showClothes(true);
+
+                mAdapter = new SuggestAdapter(getActivity(), mClothes);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setAdapter(mAdapter);
+            } else {
+                showClothes(false);
+            }
+
+
         } else {
-            notFound.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
+
+            showClothes(false);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "Test");
     }
 
-    @OnClick(R.id.btn_add) void addClicked() {
+    @OnClick(R.id.barcode_action) void barcodeAction() {
+
+        if (Build.VERSION.SDK_INT < 23) {
+            gotoScan();
+        } else {
+            if (checkAndRequestPermissions()) {
+                gotoScan();
+            }
+        }
+    }
+
+    private void gotoScan() {
+        Intent intent = new Intent(getActivity(), ScannerActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.phone_action) void phoneAction() {
         Intent intent = new Intent(getActivity(), NewActivity.class);
+        intent.putExtra(Constants.SOURCE_TYPE, true);
         startActivity(intent);
     }
 
@@ -160,6 +201,8 @@ public class SuggestionFragment extends Fragment {
                                     weatherHumidity.setText(String.format("Humidity: %s%%", String.valueOf(mainObj.getInt("humidity"))));
                                     weatherPressure.setText(String.format("Pressure: %shPa", String.valueOf(mainObj.getDouble("pressure"))));
                                     weatherTemp.setText(String.format("%s`C", String.format("%.2f", mainObj.getDouble("temp")/100)));
+                                    temperature = mainObj.getDouble("temp");
+                                    humidity = mainObj.getInt("humidity");
                                 }
                             }
                         } catch (JSONException e) {
@@ -199,6 +242,52 @@ public class SuggestionFragment extends Fragment {
                 case 5: weatherIcon.setImageResource(R.drawable.weather_rainy);
                 break;
             }
+        }
+    }
+
+    private boolean getSuggestedClothes(ClothItem item, double temp, float humidity) {
+        //return temp > 20.0 && humidity < 100 || temp > 30.0 && item.getColor() > 0;
+        return true;
+    }
+
+    private void showClothes(boolean result) {
+        if (result) {
+            notFound.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        } else {
+            notFound.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        }
+    }
+
+    private boolean checkAndRequestPermissions() {
+        int permissionCAMERA = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
+        int permissionLocation = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION);
+        List<String> listPermissionNeeded = new ArrayList<>();
+        if (permissionCAMERA != PackageManager.PERMISSION_GRANTED) {
+            listPermissionNeeded.add(Manifest.permission.CAMERA);
+        }
+        if (permissionLocation != PackageManager.PERMISSION_GRANTED) {
+            listPermissionNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (!listPermissionNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(getActivity(),  listPermissionNeeded.toArray(new String[listPermissionNeeded.size()]), PERMISSION_REQUESTED);
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUESTED:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    gotoScan();
+                } else {
+                    Toast.makeText(getActivity(), "Permission not granted", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 }

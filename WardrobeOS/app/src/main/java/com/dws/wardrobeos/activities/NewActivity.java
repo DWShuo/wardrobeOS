@@ -1,15 +1,5 @@
 package com.dws.wardrobeos.activities;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-import android.app.Activity;
-import android.content.Intent;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-
-
-import com.dws.wardrobeos.R;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -40,9 +30,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.baoyz.actionsheet.ActionSheet;
+import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.bumptech.glide.Glide;
+import com.dws.wardrobeos.Constants;
 import com.dws.wardrobeos.R;
 import com.dws.wardrobeos.models.Action;
 import com.dws.wardrobeos.models.Album;
@@ -58,7 +56,9 @@ import org.dmfs.android.colorpicker.palettes.FactoryPalette;
 import org.dmfs.android.colorpicker.palettes.Palette;
 import org.dmfs.android.colorpicker.palettes.RainbowColorFactory;
 import org.dmfs.android.colorpicker.palettes.RandomPalette;
-import org.jsoup.nodes.Document;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -73,14 +73,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-public class NewActivity extends AppCompatActivity implements ColorPickerDialogFragment.ColorDialogResultListener, ActionSheet.ActionSheetListener, OnClickListener {
+public class NewActivity extends AppCompatActivity implements ColorPickerDialogFragment.ColorDialogResultListener, ActionSheet.ActionSheetListener {
 
     private static String TAG = "NewActivity";
-    private Button scanBtn;
-    private TextView formatTxt, contentTxt, resultTxt;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.photo) AppCompatImageView photoView;
@@ -88,6 +83,8 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
     @BindView(R.id.spinner_brand) AppCompatSpinner spinnerBrand;
     @BindView(R.id.et_about) AppCompatEditText etAbout;
     @BindView(R.id.btn_color) AppCompatButton btnColor;
+    @BindView(R.id.brand_barcode) TextView brandBarCode;
+    @BindView(R.id.category_barcode) TextView categoryBarCode;
 
     private ArrayList<AlbumFile> mAlbumFiles;
 
@@ -112,6 +109,10 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
     private String mPhotoName;
     private Uri file;
 
+    private boolean sourceType;
+    private String barcode;
+    private String selectedPhotoURL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,20 +136,20 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
             permissionResult = true;
         }
 
-        scanBtn = (Button)findViewById(R.id.scan_button);
-        formatTxt = (TextView)findViewById(R.id.scan_format);
-        contentTxt = (TextView)findViewById(R.id.scan_content);
-        resultTxt = (TextView)findViewById(R.id.code_result);
-        scanBtn.setOnClickListener(this);
-    }
-
-    public void onClick(View v){
-        //respond to clicks
-        if(v.getId()==R.id.scan_button){
-            //scan
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            scanIntegrator.initiateScan();
-
+        Intent intent = getIntent();
+        sourceType = intent.getBooleanExtra(Constants.SOURCE_TYPE, true);
+        if (!sourceType) {
+            spinnerBrand.setVisibility(View.INVISIBLE);
+            spinnerType.setVisibility(View.INVISIBLE);
+            categoryBarCode.setVisibility(View.VISIBLE);
+            brandBarCode.setVisibility(View.VISIBLE);
+            barcode = intent.getStringExtra(Constants.BARCODE_PRODUCT);
+            fetchProduct(barcode);
+        } else {
+            spinnerBrand.setVisibility(View.VISIBLE);
+            spinnerType.setVisibility(View.VISIBLE);
+            categoryBarCode.setVisibility(View.INVISIBLE);
+            brandBarCode.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -157,26 +158,42 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         ClothItem clothItem = realm.createObject(ClothItem.class);
-        Log.d("Test", (String)spinnerBrand.getSelectedItem());
-        clothItem.setBrand((String)spinnerBrand.getSelectedItem());
-        clothItem.setColor(mSelectedColor);
-        Log.d("Test", String.valueOf(mSelectedColor));
-        clothItem.setType((String)spinnerType.getSelectedItem());
-        Log.d("Test", (String)spinnerType.getSelectedItem());
-        clothItem.setInfo(etAbout.getText().toString());
-        if (file != null) {
-            clothItem.setPhoto(getName(file.getPath()));
-            Log.d("Test", getName(file.getPath()));
-            if (isExternalStorageWritable()) {
+        if (sourceType) {
+            clothItem.setBrand((String)spinnerBrand.getSelectedItem());
+            clothItem.setColor(mSelectedColor);
+            clothItem.setType((String)spinnerType.getSelectedItem());
+            clothItem.setInfo(etAbout.getText().toString());
+            clothItem.setSource(true);
+            if (file != null) {
+                clothItem.setPhoto(getName(file.getPath()));
+                if (isExternalStorageWritable()) {
 
+                } else {
+                    Toast.makeText(this, "Can't save photo to SD card", Toast.LENGTH_SHORT).show();
+                    clothItem.setPhoto("");
+                }
+                etAbout.setText("");
+                photoView.setImageResource(R.mipmap.clothing_placeholder);
             } else {
-                Toast.makeText(this, "Can't save photo to SD card", Toast.LENGTH_SHORT).show();
                 clothItem.setPhoto("");
             }
-            etAbout.setText("");
-            photoView.setImageResource(R.mipmap.clothing_placeholder);
+
         } else {
-            clothItem.setPhoto("");
+
+            clothItem.setBrand(brandBarCode.getText().toString());
+            clothItem.setColor(mSelectedColor);
+            clothItem.setType(categoryBarCode.getText().toString());
+            clothItem.setInfo(etAbout.getText().toString());
+            clothItem.setSource(false);
+            clothItem.setPhoto(selectedPhotoURL);
+
+            brandBarCode.setVisibility(View.INVISIBLE);
+            categoryBarCode.setVisibility(View.INVISIBLE);
+            spinnerType.setVisibility(View.VISIBLE);
+            spinnerBrand.setVisibility(View.VISIBLE);
+
+            etAbout.setText("");
+
         }
 
         realm.commitTransaction();
@@ -361,8 +378,9 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+            sourceType = true;
+
             Drawable icon = null;
             InputStream is;
             try {
@@ -376,21 +394,6 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
             }
 
             photoView.setImageDrawable(icon);
-        }
-
-        if (scanningResult != null) {
-            //we have a result
-            String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
-            String itemlink = "https://www.barcodelookup.com/"+scanContent;
-            formatTxt.setText("FORMAT: " + scanFormat);
-            contentTxt.setText("CONTENT: " + scanContent);
-
-        }
-        else{
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
         }
     }
 
@@ -430,5 +433,92 @@ public class NewActivity extends AppCompatActivity implements ColorPickerDialogF
         }
         int namePos = filePath.lastIndexOf(File.separatorChar);
         return (namePos >=0) ? filePath.substring(namePos + 1) : filePath;
+   }
+
+   private void fetchProduct(String code) {
+
+        new SVProgressHUD(this).showInfoWithStatus("Loading");
+        String url = Constants.REST_API_URL + "barcode=" + code + "&key=" + Constants.LOOKUP_API_KEY;
+        AndroidNetworking.get(url)
+               .setPriority(Priority.HIGH)
+               .build()
+               .getAsJSONObject(new JSONObjectRequestListener() {
+                   @Override
+                   public void onResponse(JSONObject response) {
+                       new SVProgressHUD(NewActivity.this).dismiss();
+                       int status;
+                       String keystatus;
+                       try {
+                           status = response.getInt("status");
+                           keystatus = response.getString("keystatus");
+                           if (status == 0 && keystatus.equals("valid")) {
+                               JSONArray jsonArray = response.getJSONArray("result");
+                               if (jsonArray.length() > 0) {
+                                   JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                   String product_name, brand = null, category = null, url = null, details = null;
+                                   if (jsonObject.has("details")) {
+                                       JSONObject detailObj = jsonObject.getJSONObject("details");
+                                       product_name = detailObj.getString("product_name");
+                                       brand = detailObj.getString("brand");
+                                       category = detailObj.getString("category");
+                                       details = detailObj.getString("long_description");
+                                       //color = detailObj.getString("color");
+                                   }
+                                   if (jsonObject.has("images")) {
+                                       JSONObject imagesObj = jsonObject.getJSONObject("images");
+                                       url = imagesObj.getString("0");
+                                   }
+
+                                   if (!url.isEmpty()) {
+                                       Glide.with(NewActivity.this).load(url).into(photoView);
+                                   }
+
+                                   brandBarCode.setText(brand);
+                                   categoryBarCode.setText(category);
+                                   etAbout.setText(details);
+//                                   if (!color.isEmpty()) {
+//                                       btnColor.setBackgroundColor(Color.parseColor(color));
+//                                       mSelectedColor = Integer.parseInt(color);
+//                                   } else {
+//                                       btnColor.setBackgroundColor(mSelectedColor);
+//                                   }
+
+                                   btnColor.setBackgroundColor(Color.parseColor("#000000"));
+                                   mSelectedColor = Color.parseColor("#000000");
+
+                                   selectedPhotoURL = url;
+
+                               } else {
+                                   Toast.makeText(NewActivity.this, "Nothing to show", Toast.LENGTH_SHORT).show();
+                                   sourceType = true;
+                                   categoryBarCode.setVisibility(View.INVISIBLE);
+                                   brandBarCode.setVisibility(View.INVISIBLE);
+                                   spinnerBrand.setVisibility(View.VISIBLE);
+                                   spinnerType.setVisibility(View.VISIBLE);
+                               }
+                           } else {
+                               Toast.makeText(NewActivity.this, keystatus, Toast.LENGTH_SHORT).show();
+                               sourceType = true;
+                               categoryBarCode.setVisibility(View.INVISIBLE);
+                               brandBarCode.setVisibility(View.INVISIBLE);
+                               spinnerBrand.setVisibility(View.VISIBLE);
+                               spinnerType.setVisibility(View.VISIBLE);
+                           }
+                       } catch (JSONException e) {
+                           e.printStackTrace();
+                       }
+                   }
+
+                   @Override
+                   public void onError(ANError anError) {
+                       new SVProgressHUD(NewActivity.this).dismiss();
+                       Toast.makeText(NewActivity.this, "Something went wrong, please try again.", Toast.LENGTH_SHORT).show();
+                       sourceType = true;
+                       categoryBarCode.setVisibility(View.INVISIBLE);
+                       brandBarCode.setVisibility(View.INVISIBLE);
+                       spinnerBrand.setVisibility(View.VISIBLE);
+                       spinnerType.setVisibility(View.VISIBLE);
+                   }
+               });
    }
 }
