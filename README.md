@@ -13,7 +13,11 @@ Andrioid phone
 
 ### Installing
 
-git clone https://github.com/DWShuo/wardrobeOS.git
+* Navigate to this page https://github.com/DWShuo/wardrobeOS on mobile device (view website as desktop version, not mobile)
+
+* Click on wardrobeOS.apk, and download
+
+* Install apk on phone
 
 ### Coding Style 
 We are using Google java style guide, the following is a condensed version of Google's style guide. [More Info](https://google.github.io/styleguide/javaguide.html)
