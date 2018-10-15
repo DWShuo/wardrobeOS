@@ -67,10 +67,6 @@ return new MyClass() {
   } catch (Exception e) {}
 ```
 
-## Built With
-
-* [Maven](https://maven.apache.org/) - Dependency Management
-
 ## Contributing
 David Wang  
 Meghnath Shankar  
